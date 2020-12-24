@@ -1,37 +1,9 @@
-## Welcome to GitHub Pages
+# Project SCRAMBLE - II
 
-You can use the [editor on GitHub](https://github.com/Sierra007117/SCRAMBLE2/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Project SCRAMBLE, an eyepiece assigned to ER and MTF-Tau-1, designed by Dr. Oleksei and Dr. Dan specifically to counteract the cognitohazard of SCP-096 in event of a containment breach. It carries a small microprocessor which constantly analyzes the viewing field for the facial features of SCP-096. Facial recognition software inside instantly identifies them, scrambling the image into an unrecognizable mess before the light reaches the human eye. As the MCU inside SCRAMBLE picks up SCP-096’s facial features and begin scrambling them, there is a split-second of uninterrupted light flow to the retina. Computers are fast, but not as fast as light. So, there is a split-second image of SCP-096’s direct face sent to the brain. It isn't even consciously received, but it is enough to trigger the hostile reaction in SCP-096. This flaw was discovered during Incident 096-1-A and Project SCRAMBLE was deemed to be ineffective.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+![Alt text](img/096-1-A[1].png)
+![Alt text](img/096-1-A[2].png)
+![Alt text](img/096-1-A[3].png)
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Sierra007117/SCRAMBLE2/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+SCRAMBLE - II negates this fatal flaw by utilizing the intelligence and research data obtained from Documentation #096-1 of Experiment 096-1. It has been confirmed that artistic depictions of SCP-096 will not trigger any hostile reaction. So instead of scrambling the face of SCP-096, SCRAMBLE - II deploys an edge preserving filter and turns the real time video feed into an artistic depictions, which in theory should allow visual observation of SCP-096b without triggering any hostile reaction. To confirm this, D class personnel and simulated containment breach is required.
