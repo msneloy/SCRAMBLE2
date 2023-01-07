@@ -15,6 +15,14 @@ cap = cv2.VideoCapture(0)
 prev_frame_time = 0
 new_frame_time = 0
 
+# Set the width and height to their maximum values
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+# Get the width and height of the frame
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
 if not cap.isOpened():
     print("Failed to launch camera")
     exit()
@@ -29,11 +37,12 @@ while True:
     cpu_usage = psutil.cpu_percent()
     memory_usage = psutil.virtual_memory().percent
 
-    FPS = "FPS : " + str(fps)
+    FPS = "FPS : " + str(int(fps))
     DT = "Timestamp : " + str(datetime.now())
     CPU = "CPU usage : " + str(cpu_usage) + "%"
     MEM = "Memory usage : " + str(memory_usage) + "%"
-    print("Console Log | ", DT, " | ", CPU, " | ", MEM, " | ", FPS)
+    RES = "Resolution : " + str(width) + "x" + str(height)
+    print("Console Log | ", DT, " | ", CPU, " | ", MEM, " | ", FPS, " | ", RES)
     
     feed = sketch(frame)
     cv2.imshow('CAM FEED', feed)
