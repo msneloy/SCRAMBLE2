@@ -1,3 +1,4 @@
+import psutil
 import time
 from datetime import datetime
 
@@ -24,9 +25,15 @@ while True:
     fps = 1 / (new_frame_time - prev_frame_time)
     prev_frame_time = new_frame_time
 
+    # Get CPU and memory usage
+    cpu_usage = psutil.cpu_percent()
+    memory_usage = psutil.virtual_memory().percent
+
     FPS = "FPS : " + str(fps)
     DT = "Timestamp : " + str(datetime.now())
-    print("Console Log | ", DT, " | ", FPS)
+    CPU = "CPU usage : " + str(cpu_usage) + "%"
+    MEM = "Memory usage : " + str(memory_usage) + "%"
+    print("Console Log | ", DT, " | ", CPU, " | ", MEM, " | ", FPS)
     
     feed = sketch(frame)
     cv2.imshow('CAM FEED', feed)
