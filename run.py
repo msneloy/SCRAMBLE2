@@ -1,87 +1,88 @@
-# Import the psutil and time modules for CPU and memory usage and FPS calculation
+# Import the necessary modules
 import psutil
 import time
-
-# Import the datetime module for timestamp generation
 from datetime import datetime
-
-# Import the cv2 module for image processing
 import cv2
+import threading
 
-# Define the sketch function that takes an image and applies a "sketch" effect to it
+# Define the sketch function
 def sketch(image):
-    # Convert the image to grayscale
-    img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Same as before...
 
-    # Apply a Gaussian blur to the grayscale image to reduce high-frequency noise
-    img_gray_blur = cv2.GaussianBlur(img_gray, (5,5), 0)
+# Define a thread function for reading and processing the video feed
+def process_video_feed():
+    # Open the camera
+    cap = cv2.VideoCapture(0)
 
-    # Detect edges in the image using the Canny edge detector
-    canny_edges = cv2.Canny(img_gray_blur, 10, 70)
+    # Set the frame size to the maximum values
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    # Apply a binary inverse threshold to the edge image
-    ret, mask = cv2.threshold(canny_edges, 70, 255, cv2.THRESH_BINARY_INV)
+    # Initialize variables for FPS calculation
+    prev_frame_time = 0
+    new_frame_time = 0
 
-    # Return the thresholded image
-    return mask
+    while True:
+        # Read a frame from the camera
+        ret, frame = cap.read()
 
-# Open the default camera using cv2.VideoCapture
-cap = cv2.VideoCapture(0)
+        # Apply the sketch effect to the frame
+        feed = sketch(frame)
 
-# Initialize variables for FPS calculation
-prev_frame_time = 0
-new_frame_time = 0
+        # Calculate the FPS of the video feed
+        new_frame_time = time.time()
+        fps = 1 / (new_frame_time - prev_frame_time)
+        prev_frame_time = new_frame_time
 
-# Set the width and height of the frames to their maximum values
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        # Get the CPU and memory usage
+        cpu_usage = psutil.cpu_percent()
+        memory_usage = psutil.virtual_memory().percent
 
-# Get the width and height of the frames
-width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        # Generate strings for the FPS, timestamp, CPU usage, memory usage, and resolution
+        FPS = "FPS : " + str(int(fps))
+        DT = "Timestamp : " + str(datetime.now())
+        CPU = "CPU usage : " + str(cpu_usage) + "%"
+        MEM = "Memory usage : " + str(memory_usage) + "%"
+        RES = "Resolution : " + str(width) + "x" + str(height)
 
-# Check if the camera was successfully opened
-if not cap.isOpened():
-    # If the camera could not be opened, print an error message and exit
-    print("Failed to launch camera")
-    exit()
+        # Log the FPS, timestamp, CPU usage, memory usage, and resolution to the console
+        print("Console Log | ", DT, " | ", CPU, " | ", MEM, " | ", FPS, " | ", RES)
 
-# Enter a loop to process and display the video feed
-while True:
-    # Read a frame from the camera
-    ret, frame = cap.read()
+        # Store the processed frame in a global variable
+        global processed_frame
+        processed_frame = feed
 
-    # Calculate the FPS of the video feed
-    new_frame_time = time.time()
-    fps = 1 / (new_frame_time - prev_frame_time)
-    prev_frame_time = new_frame_time
+        # Check if the user pressed the "q" key
+        if cv2.waitKey(1) == ord("q"):
+            # If the "q" key was pressed, break out of the loop
+            break
 
-    # Get the CPU and memory usage
-    cpu_usage = psutil.cpu_percent()
-    memory_usage = psutil.virtual_memory().percent
+    # Release the camera
+    cap.release()
 
-    # Generate strings for the FPS, timestamp, CPU usage, memory usage, and resolution
-    FPS = "FPS : " + str(int(fps))
-    DT = "Timestamp : " + str(datetime.now())
-    CPU = "CPU usage : " + str(cpu_usage) + "%"
-    MEM = "Memory usage : " + str(memory_usage) + "%"
-    RES = "Resolution : " + str(width) + "x" + str(height)
+# Define a thread function for displaying the frames
+def display_frames():
+    while True:
+        # Display the processed frame
+        cv2.imshow('CAM FEED', processed_frame)
 
-    # Log the FPS, timestamp, CPU usage, memory usage, and resolution to the console
-    print("Console Log | ", DT, " | ", CPU, " | ", MEM, " | ", FPS, " | ", RES)
+        # Check if the user pressed the "q" key
+        if cv2.waitKey(1) == ord("q"):
+            # If the "q" key was pressed, break out of the loop
+            break
 
-    # Apply the sketch effect to the frame
-    feed = sketch(frame)
+    # Close the window
+    cv2.destroyAllWindows()
 
-    # Display the frame with the sketch effect applied
-    cv2.imshow('CAM FEED', feed)
+# Create a global variable for the processed frame
+processed_frame = None
 
-    # Check if the user pressed the "q" key
-    if cv2.waitKey(1) == ord("q"):
-        # If the "q" key was pressed, break out of the loop
-        break
+# Create and start the threads
+process_thread = threading.Thread(target=process_video_feed)
+display_thread = threading.Thread(target=display_frames)
+process_thread.start()
+display_thread.start()
 
-# Release the camera and close all windows
-cap.release()
-cv2.destroyAllWindows()
-
+# Wait for both threads to finish
+process_thread.join()
+display_thread.join()
